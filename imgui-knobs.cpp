@@ -195,32 +195,40 @@ namespace ImGuiKnobs {
         }
 
         color_set GetPrimaryColorSet() {
-            auto *colors = ImGui::GetStyle().Colors;
-
-            return {colors[ImGuiCol_ButtonActive], colors[ImGuiCol_ButtonHovered], colors[ImGuiCol_ButtonHovered]};
+            //return {colors[ImGuiCol_ButtonActive], colors[ImGuiCol_ButtonHovered], colors[ImGuiCol_ButtonHovered]};
+            //auto *colors = ImGui::GetStyle().Colors;
+            auto light_blue = ImColor(0.1f, 0.45f, 0.7f, 1.f);
+            auto lighter_blue = ImColor(0.1f, 0.5f, 1.f, 1.f);
+            return {light_blue, lighter_blue, lighter_blue};
         }
 
         color_set GetSecondaryColorSet() {
             auto *colors = ImGui::GetStyle().Colors;
-            auto active = ImVec4(
-                    colors[ImGuiCol_ButtonActive].x * 0.5f,
-                    colors[ImGuiCol_ButtonActive].y * 0.5f,
-                    colors[ImGuiCol_ButtonActive].z * 0.5f,
-                    colors[ImGuiCol_ButtonActive].w);
+            //            auto active = ImVec4(
+            //                    colors[ImGuiCol_ButtonActive].x * 0.5f,
+            //                    colors[ImGuiCol_ButtonActive].y * 0.5f,
+            //                    colors[ImGuiCol_ButtonActive].z * 0.5f,
+            //                    colors[ImGuiCol_ButtonActive].w);
+            //
+            //            auto hovered = ImVec4(
+            //                    colors[ImGuiCol_ButtonHovered].x * 0.5f,
+            //                    colors[ImGuiCol_ButtonHovered].y * 0.5f,
+            //                    colors[ImGuiCol_ButtonHovered].z * 0.5f,
+            //                    colors[ImGuiCol_ButtonHovered].w);
+            //
+            //return {red, hovered, hovered};
 
-            auto hovered = ImVec4(
-                    colors[ImGuiCol_ButtonHovered].x * 0.5f,
-                    colors[ImGuiCol_ButtonHovered].y * 0.5f,
-                    colors[ImGuiCol_ButtonHovered].z * 0.5f,
-                    colors[ImGuiCol_ButtonHovered].w);
-
-            return {active, hovered, hovered};
+            // Color of the circle
+            auto grey = ImColor(0.7f, 0.7f, 0.7f, 1.f);
+            auto grey_hovered = ImColor(0.6f, 0.6f, 0.6f, 1.f);
+            return{grey, grey_hovered, grey_hovered};
         }
 
         color_set GetTrackColorSet() {
-            auto *colors = ImGui::GetStyle().Colors;
-
-            return {colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg]};
+            //auto *colors = ImGui::GetStyle().Colors;
+            //return {colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg], colors[ImGuiCol_FrameBg]};
+            auto dark_blue = ImColor(0.1f, 0.1f, 0.65f, 1.f);
+            return {dark_blue, dark_blue, dark_blue};
         }
     }// namespace detail
 
