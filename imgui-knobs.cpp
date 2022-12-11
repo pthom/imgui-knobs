@@ -203,18 +203,18 @@ namespace ImGuiKnobs {
         }
 
         color_set GetSecondaryColorSet() {
-            auto *colors = ImGui::GetStyle().Colors;
-            //            auto active = ImVec4(
-            //                    colors[ImGuiCol_ButtonActive].x * 0.5f,
-            //                    colors[ImGuiCol_ButtonActive].y * 0.5f,
-            //                    colors[ImGuiCol_ButtonActive].z * 0.5f,
-            //                    colors[ImGuiCol_ButtonActive].w);
+            //auto *colors = ImGui::GetStyle().Colors;
+            //auto active = ImVec4(
+            //        colors[ImGuiCol_ButtonActive].x * 0.5f,
+            //        colors[ImGuiCol_ButtonActive].y * 0.5f,
+            //        colors[ImGuiCol_ButtonActive].z * 0.5f,
+            //        colors[ImGuiCol_ButtonActive].w);
             //
-            //            auto hovered = ImVec4(
-            //                    colors[ImGuiCol_ButtonHovered].x * 0.5f,
-            //                    colors[ImGuiCol_ButtonHovered].y * 0.5f,
-            //                    colors[ImGuiCol_ButtonHovered].z * 0.5f,
-            //                    colors[ImGuiCol_ButtonHovered].w);
+            //auto hovered = ImVec4(
+            //        colors[ImGuiCol_ButtonHovered].x * 0.5f,
+            //        colors[ImGuiCol_ButtonHovered].y * 0.5f,
+            //        colors[ImGuiCol_ButtonHovered].z * 0.5f,
+            //        colors[ImGuiCol_ButtonHovered].w);
             //
             //return {red, hovered, hovered};
 
