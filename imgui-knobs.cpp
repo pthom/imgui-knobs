@@ -162,7 +162,13 @@ namespace ImGuiKnobs {
                 // Center title
                 ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (width - title_size[0]) * 0.5f);
 
-                ImGui::Text("%s", label);
+                // Remove chars after '##' if present in the label before drawing
+                char* label_cleaned = strdup(label);
+                if (char* p = strstr(label_cleaned, "##"))
+                    *p = '\0';
+                if (strlen(label_cleaned) > 0)
+                    ImGui::Text("%s", label_cleaned);
+                free(label_cleaned);
             }
 
             // Draw knob
