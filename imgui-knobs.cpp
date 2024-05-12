@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <cstdlib>
+#include <map>
 #include <imgui.h>
 #include <imgui_internal.h>
 
@@ -9,6 +10,28 @@
 
 namespace ImGuiKnobs {
     namespace detail {
+
+        void Hack_MakeDraggableHorizontalVertical(ImGuiID gid)
+        {
+            // Hack to make the knob draggable horizontally and/or vertically:
+            //     we hack ImGui::ImGui::GetIO().MouseDelta before calling ImGui::DragBehavior
+            static std::map<ImGuiID, bool> isDragging;
+            if (isDragging.find(gid) == isDragging.end())
+                isDragging[gid] = false;
+            if (ImGui::IsItemHovered() && ImGui::IsMouseDown(0))
+                isDragging[gid] = true;
+            if (! ImGui::IsMouseDown(0))
+                isDragging[gid] = false;
+            if (isDragging[gid])
+            {
+                ImVec2 mouseDelta = ImGui::GetIO().MouseDelta;
+                float deltaNorm = sqrtf(mouseDelta.x * mouseDelta.x + mouseDelta.y * mouseDelta.y);
+                bool positive = (mouseDelta.x - mouseDelta.y) > 0;
+                float sign = positive ? 1.0f : -1.0f;
+                ImGui::GetIO().MouseDelta = ImVec2(sign * deltaNorm, 0.0f);
+            }
+        }
+
         void draw_arc1(ImVec2 center, float radius, float start_angle, float end_angle, float thickness, ImColor color, int num_segments) {
             ImVec2 start = {
                     center[0] + cosf(start_angle) * radius,
@@ -78,11 +101,13 @@ namespace ImGuiKnobs {
                 ImGui::InvisibleButton(_label, {radius * 2.0f, radius * 2.0f});
                 auto gid = ImGui::GetID(_label);
                 ImGuiSliderFlags drag_flags = 0;
-                if (!(flags & ImGuiKnobFlags_DragHorizontal)) {
-                    drag_flags |= ImGuiSliderFlags_Vertical;
-                }
-                value_changed = ImGui::DragBehavior(gid, data_type, p_value, speed, &v_min, &v_max, format, drag_flags);
 
+                // if (!(flags & ImGuiKnobFlags_DragHorizontal)) {
+                //    drag_flags |= ImGuiSliderFlags_Vertical;
+                // }
+                Hack_MakeDraggableHorizontalVertical(gid);
+
+                value_changed = ImGui::DragBehavior(gid, data_type, p_value, speed, &v_min, &v_max, format, drag_flags);
                 angle_min = IMGUIKNOBS_PI * 0.75f;
                 angle_max = IMGUIKNOBS_PI * 2.25f;
                 center = {screen_pos[0] + radius, screen_pos[1] + radius};
@@ -184,9 +209,9 @@ namespace ImGuiKnobs {
             // Draw input
             if (!(flags & ImGuiKnobFlags_NoInput)) {
                 ImGuiSliderFlags drag_flags = 0;
-                if (!(flags & ImGuiKnobFlags_DragHorizontal)) {
-                    drag_flags |= ImGuiSliderFlags_Vertical;
-                }
+                //if (!(flags & ImGuiKnobFlags_DragHorizontal)) {
+                //    drag_flags |= ImGuiSliderFlags_Vertical;
+                //}
                 auto changed = ImGui::DragScalar("###knob_drag", data_type, p_value, speed, &v_min, &v_max, format, drag_flags);
                 if (changed) {
                     k.value_changed = true;
