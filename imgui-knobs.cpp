@@ -233,43 +233,65 @@ namespace ImGuiKnobs {
             return k;
         }
 
+        static bool gHasCustomColors = false;
+        static KnobColors gCustomColors = {
+            color_set(ImColor(0, 0, 0)), color_set(ImColor(0, 0, 0)), color_set(ImColor(0, 0, 0))
+        };
+
+        static bool IsDarkTheme() {
+            auto bg = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+            float luminance = 0.299f * bg.x + 0.587f * bg.y + 0.114f * bg.z;
+            return luminance < 0.5f;
+        }
+
         color_set GetPrimaryColorSet() {
-            //return {colors[ImGuiCol_ButtonActive], colors[ImGuiCol_ButtonHovered], colors[ImGuiCol_ButtonHovered]};
-            //auto *colors = ImGui::GetStyle().Colors;
-            auto light_blue = ImColor(0.1f, 0.45f, 0.7f, 1.f);
-            auto lighter_blue = ImColor(0.1f, 0.5f, 1.f, 1.f);
-            return {light_blue, lighter_blue, lighter_blue};
+            if (gHasCustomColors) return gCustomColors.primary;
+            if (IsDarkTheme()) {
+                return {ImColor(0.1f, 0.45f, 0.7f, 1.f),
+                        ImColor(0.1f, 0.5f, 1.f, 1.f),
+                        ImColor(0.1f, 0.5f, 1.f, 1.f)};
+            } else {
+                return {ImColor(0.1f, 0.35f, 0.6f, 1.f),
+                        ImColor(0.1f, 0.4f, 0.8f, 1.f),
+                        ImColor(0.1f, 0.4f, 0.8f, 1.f)};
+            }
         }
 
         color_set GetSecondaryColorSet() {
-            //auto *colors = ImGui::GetStyle().Colors;
-            //auto active = ImVec4(
-            //        colors[ImGuiCol_ButtonActive].x * 0.5f,
-            //        colors[ImGuiCol_ButtonActive].y * 0.5f,
-            //        colors[ImGuiCol_ButtonActive].z * 0.5f,
-            //        colors[ImGuiCol_ButtonActive].w);
-            //
-            //auto hovered = ImVec4(
-            //        colors[ImGuiCol_ButtonHovered].x * 0.5f,
-            //        colors[ImGuiCol_ButtonHovered].y * 0.5f,
-            //        colors[ImGuiCol_ButtonHovered].z * 0.5f,
-            //        colors[ImGuiCol_ButtonHovered].w);
-            //
-            //return {active, hovered, hovered};
-
-            // Color of the circle
-            auto grey = ImColor(0.7f, 0.7f, 0.7f, 1.f);
-            auto grey_hovered = ImColor(0.6f, 0.6f, 0.6f, 1.f);
-            return{grey, grey_hovered, grey_hovered};
+            if (gHasCustomColors) return gCustomColors.secondary;
+            if (IsDarkTheme()) {
+                return {ImColor(0.7f, 0.7f, 0.7f, 1.f),
+                        ImColor(0.6f, 0.6f, 0.6f, 1.f),
+                        ImColor(0.6f, 0.6f, 0.6f, 1.f)};
+            } else {
+                return {ImColor(0.5f, 0.5f, 0.5f, 1.f),
+                        ImColor(0.4f, 0.4f, 0.4f, 1.f),
+                        ImColor(0.4f, 0.4f, 0.4f, 1.f)};
+            }
         }
 
         color_set GetTrackColorSet() {
-            //auto *colors = ImGui::GetStyle().Colors;
-            //return {colors[ImGuiCol_Button], colors[ImGuiCol_Button], colors[ImGuiCol_Button]};
-            auto dark_blue = ImColor(0.1f, 0.1f, 0.65f, 1.f);
-            return {dark_blue, dark_blue, dark_blue};
+            if (gHasCustomColors) return gCustomColors.track;
+            if (IsDarkTheme()) {
+                return {ImColor(0.3f, 0.3f, 0.7f, 1.f),
+                        ImColor(0.3f, 0.3f, 0.7f, 1.f),
+                        ImColor(0.3f, 0.3f, 0.7f, 1.f)};
+            } else {
+                return {ImColor(0.6f, 0.6f, 0.8f, 1.f),
+                        ImColor(0.6f, 0.6f, 0.8f, 1.f),
+                        ImColor(0.6f, 0.6f, 0.8f, 1.f)};
+            }
         }
     }// namespace detail
+
+    void SetKnobColors(const KnobColors& colors) {
+        detail::gHasCustomColors = true;
+        detail::gCustomColors = colors;
+    }
+
+    void UnsetKnobColors() {
+        detail::gHasCustomColors = false;
+    }
 
     template<typename DataType>
     bool BaseKnob(
