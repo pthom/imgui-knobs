@@ -37,12 +37,27 @@ namespace ImGuiKnobs {
         color_set(ImColor base, ImColor hovered, ImColor active)
             : base(base), hovered(hovered), active(active) {}
 
+        color_set() : base(ImColor(0, 0, 0)), hovered(ImColor(0, 0, 0)), active(ImColor(0, 0, 0)) {}
+
         color_set(ImColor color) {
             base = color;
             hovered = color;
             active = color;
         }
     };
+
+    struct KnobColors {
+        color_set primary;
+        color_set secondary;
+        color_set track;
+    };
+
+    // Set custom knob colors. Pass individual color_sets for primary (indicator),
+    // secondary (circle body), and track (background arc).
+    void SetKnobColors(const KnobColors& colors);
+
+    // Reset to theme-aware defaults (auto-detects dark/light theme).
+    void UnsetKnobColors();
 
     bool Knob(
             const char *label,
